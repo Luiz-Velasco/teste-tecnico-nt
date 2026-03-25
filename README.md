@@ -75,10 +75,38 @@ src/
 - Fallback especifico para CI em ambiente headless
 - Evidencia automatica por screenshot ao final de cada teste (teardown)
 
-## Instalacao
+## Pre-requisitos
 
-1. Crie e ative um ambiente virtual (opcional, recomendado).
-2. Instale as dependencias:
+- Python 3.11 ou superior
+- Google Chrome instalado
+- Git instalado (para clonar o repositorio)
+
+## Instalacao e Setup
+
+1. Clone o repositorio:
+
+```bash
+git clone https://github.com/Luiz-Velasco/teste-tecnico-nt.git
+cd teste-tecnico-nt
+```
+
+2. Crie e ative um ambiente virtual (opcional, recomendado):
+
+Windows (PowerShell):
+
+```bash
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+```
+
+Linux/macOS:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
+
+3. Instale as dependencias:
 
 ```bash
 pip install -r requirements.txt
@@ -134,3 +162,9 @@ robot -d results src/TestCases/
 - abrir o workflow `Robot Framework CI`
 - abrir ou atualizar um Pull Request para disparar a execucao automaticamente
 - baixar os artefatos `robot-reports`
+
+## Observacao importante para CI
+
+- Na execucao local, os testes usam a interacao pela lupa no cabecalho.
+- Na pipeline CI (headless), a busca utiliza URL com parametro `?s=termo` para reduzir instabilidade de layout responsivo.
+- O comportamento validado permanece o mesmo: resultado de busca com e sem retorno.

@@ -1,6 +1,6 @@
 # Automacao de Testes - Busca no Blog do AGI
 
-Projeto de automacao de testes web com Robot Framework e SeleniumLibrary para validar a funcionalidade de busca do site [Blog do AGI](https://blogdoagi.com.br/).
+Projeto de automacao de testes web com Robot Framework e SeleniumLibrary para validar a funcionalidade de busca do site [Blog do AGI](https://blogdoagi.com.br/)
 
 ## Tecnologias utilizadas
 

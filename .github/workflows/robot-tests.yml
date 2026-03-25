@@ -2,7 +2,8 @@ name: Robot Framework CI
 
 on:
   pull_request:
-    branches: [main, master]
+    branches: [master]
+    types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
   robot-tests:

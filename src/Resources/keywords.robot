@@ -2,10 +2,18 @@
 Resource    ../Resources/variables.robot
 Resource    ../Pages/blog_page.robot
 Library     SeleniumLibrary
+Library     OperatingSystem
 
 *** Keywords ***
 Abrir Blog
-    Open Browser    ${URL_BASE}    ${NAVEGADOR}
+    ${ci}=    Get Environment Variable    CI    false
+    ${chrome_options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
+    Call Method    ${chrome_options}    add_argument    --window-size\=1920,1080
+    Run Keyword If    '${ci}' == 'true'    Call Method    ${chrome_options}    add_argument    --headless\=new
+    Run Keyword If    '${ci}' == 'true'    Call Method    ${chrome_options}    add_argument    --no-sandbox
+    Run Keyword If    '${ci}' == 'true'    Call Method    ${chrome_options}    add_argument    --disable-dev-shm-usage
+    Run Keyword If    '${ci}' == 'true'    Call Method    ${chrome_options}    add_argument    --disable-gpu
+    Open Browser    ${URL_BASE}    ${NAVEGADOR}    options=${chrome_options}
     Maximize Browser Window
 
 Fechar Navegador

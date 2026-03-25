@@ -6,6 +6,7 @@ Projeto de automacao de testes web com Robot Framework e SeleniumLibrary para va
 
 - Robot Framework
 - SeleniumLibrary
+- Selenium
 - Chrome WebDriver
 
 ## Estrutura do projeto
@@ -40,7 +41,7 @@ src/
 
 1. Busca com resultado valido
 - Acessa o site
-- Abre a busca
+- Abre a busca pela lupa em execucao local
 - Pesquisa por `investimentos`
 - Valida que existem resultados
 
@@ -48,6 +49,12 @@ src/
 - Pesquisa por `invalido`
 - Valida comportamento sem resultados
 - Valida a mensagem de retorno: "nada foi encontrado"
+
+## Estrategia de execucao
+
+- Em execucao local, a automacao interage com a lupa de busca no cabecalho do blog.
+- Em CI (GitHub Actions), a automacao utiliza a URL de pesquisa (`?s=termo`) para evitar instabilidade do layout responsivo em modo headless.
+- Em ambos os casos, a validacao continua sendo feita sobre a funcionalidade real de pesquisa do blog.
 
 ## Variaveis globais (arquivo variables.robot)
 
@@ -65,12 +72,41 @@ src/
 - Nao utiliza `Sleep` fixo
 - Usa `Wait Until Element Is Visible` e `Wait Until Page Contains Element`
 - Locators mais robustos (aria-label, placeholder e xpath confiavel)
+- Fallback especifico para CI em ambiente headless
 - Evidencia automatica por screenshot ao final de cada teste (teardown)
 
-## Instalacao
+## Pre-requisitos
 
-1. Crie e ative um ambiente virtual (opcional, recomendado).
-2. Instale as dependencias:
+- Python 3.11 ou superior
+- Google Chrome instalado
+- Git instalado (para clonar o repositorio)
+
+## Instalacao e Setup
+
+1. Clone o repositorio:
+
+```bash
+git clone https://github.com/Luiz-Velasco/teste-tecnico-nt.git
+cd teste-tecnico-nt
+```
+
+2. Crie e ative um ambiente virtual (opcional, recomendado):
+
+Windows (PowerShell):
+
+```bash
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+```
+
+Linux/macOS:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
+
+3. Instale as dependencias:
 
 ```bash
 pip install -r requirements.txt
@@ -104,9 +140,11 @@ O projeto possui pipeline pronta para avaliacao tecnica em:
 
 Essa pipeline:
 
-- roda apenas em eventos de `pull_request` para `main` e `master`
+- roda apenas em eventos de `pull_request` para `master`
+- dispara quando o PR e aberto, atualizado, reaberto ou marcado como pronto para revisao
 - instala dependencias Python
 - executa os testes Robot em ambiente Linux com navegador Chrome via `xvfb-run`
+- utiliza Selenium Manager e configuracao especifica para execucao headless no CI
 - publica artefatos `results/report.html`, `results/log.html` e `results/output.xml`
 
 ## Como o avaliador pode validar rapidamente
@@ -124,3 +162,9 @@ robot -d results src/TestCases/
 - abrir o workflow `Robot Framework CI`
 - abrir ou atualizar um Pull Request para disparar a execucao automaticamente
 - baixar os artefatos `robot-reports`
+
+## Observacao importante para CI
+
+- Na execucao local, os testes usam a interacao pela lupa no cabecalho.
+- Na pipeline CI (headless), a busca utiliza URL com parametro `?s=termo` para reduzir instabilidade de layout responsivo.
+- O comportamento validado permanece o mesmo: resultado de busca com e sem retorno.

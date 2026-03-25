@@ -22,10 +22,16 @@ Fechar Navegador
 
 Buscar Por Termo
     [Arguments]    ${termo}
-    Clicar Na Lupa De Busca
-    Preencher Campo De Busca Com Termo    ${termo}
-    Submeter Busca
+    ${ci}=    Get Environment Variable    CI    false
+    Run Keyword If    '${ci}' == 'true'    Buscar Por Termo Via URL    ${termo}
+    Run Keyword If    '${ci}' != 'true'    Clicar Na Lupa De Busca
+    Run Keyword If    '${ci}' != 'true'    Preencher Campo De Busca Com Termo    ${termo}
+    Run Keyword If    '${ci}' != 'true'    Submeter Busca
     Esperar Carregamento Da Pagina De Resultados
+
+Buscar Por Termo Via URL
+    [Arguments]    ${termo}
+    Go To    ${URL_BASE}?s=${termo}
 
 Validar Que Existem Resultados
     ${total_resultados}=    Obter Quantidade De Resultados

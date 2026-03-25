@@ -1,0 +1,121 @@
+# Automacao de Testes - Busca no Blog do AGI
+
+Projeto de automacao de testes web com Robot Framework e SeleniumLibrary para validar a funcionalidade de busca do site [Blog do AGI](https://blogdoagi.com.br/).
+
+## Tecnologias utilizadas
+
+- Robot Framework
+- SeleniumLibrary
+- Chrome WebDriver
+
+## Estrutura do projeto
+
+```text
+src/
+  Pages/
+    blog_page.robot
+  Resources/
+    keywords.robot
+    variables.robot
+  TestCases/
+    teste_pesquisa.robot
+```
+
+### Responsabilidade de cada arquivo
+
+- `src/Pages/blog_page.robot`:
+  - Define locators robustos da pagina de busca
+  - Implementa keywords de baixo nivel (acoes de pagina)
+- `src/Resources/variables.robot`:
+  - Centraliza variaveis globais (URL, navegador, termos de busca)
+- `src/Resources/keywords.robot`:
+  - Implementa keywords de alto nivel (fluxo de negocio)
+- `src/TestCases/teste_pesquisa.robot`:
+  - Contem os cenarios em estrutura BDD em portugues (Dado/Quando/Entao)
+
+## Cenarios cobertos
+
+1. Busca com resultado valido
+- Acessa o site
+- Abre a busca
+- Pesquisa por `investimentos`
+- Valida que existem resultados
+
+2. Busca sem resultado
+- Pesquisa por `invalido`
+- Valida comportamento sem resultados
+- Valida a mensagem de retorno: "nada foi encontrado"
+
+## Variaveis globais (arquivo variables.robot)
+
+- `${URL_BASE}`
+- `${NAVEGADOR}`
+- `${TERMO_BUSCA_VALIDO}`
+- `${TERMO_BUSCA_INEXISTENTE}`
+
+## Boas praticas aplicadas
+
+- Padrao Page Object
+- Separacao clara de responsabilidades
+- Reutilizacao de keywords
+- Nao utiliza `Sleep` fixo
+- Usa `Wait Until Element Is Visible` e `Wait Until Page Contains Element`
+- Locators mais robustos (aria-label, placeholder e xpath confiavel)
+
+## Instalacao
+
+1. Crie e ative um ambiente virtual (opcional, recomendado).
+2. Instale as dependencias:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Execucao dos testes
+
+Execute os testes com:
+
+```bash
+robot -d results src/TestCases/
+```
+
+Ou execute somente a suite principal:
+
+```bash
+robot -d results src/TestCases/teste_pesquisa.robot
+```
+
+## Observacoes sobre WebDriver
+
+- E necessario ter o Chrome instalado.
+- Garanta compatibilidade entre versao do Chrome e ChromeDriver.
+- Se preferir, utilize Selenium Manager (versoes atuais do Selenium) para gerenciamento automatico do driver.
+
+## Pipeline CI/CD (GitHub Actions)
+
+O projeto possui pipeline pronta para avaliacao tecnica em:
+
+- `.github/workflows/robot-tests.yml`
+
+Essa pipeline:
+
+- roda em `push`, `pull_request` e execucao manual (`workflow_dispatch`)
+- instala dependencias Python
+- executa os testes Robot em ambiente Linux com navegador Chrome via `xvfb-run`
+- publica artefatos `results/report.html`, `results/log.html` e `results/output.xml`
+
+## Como o avaliador pode validar rapidamente
+
+1. Clonar o repositorio.
+2. Executar localmente:
+
+```bash
+pip install -r requirements.txt
+robot -d results src/TestCases/
+```
+
+3. Ou validar pela aba Actions do GitHub:
+
+- abrir o workflow `Robot Framework CI`
+- executar manualmente (Run workflow) ou verificar execucao automatica em push/PR
+- baixar os artefatos `robot-reports`

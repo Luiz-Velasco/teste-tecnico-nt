@@ -15,6 +15,7 @@ src/
   Pages/
     blog_page.robot
   Resources/
+    bdd_steps.robot
     keywords.robot
     variables.robot
   TestCases/
@@ -28,10 +29,12 @@ src/
   - Implementa keywords de baixo nivel (acoes de pagina)
 - `src/Resources/variables.robot`:
   - Centraliza variaveis globais (URL, navegador, termos de busca)
+- `src/Resources/bdd_steps.robot`:
+  - Contem os passos BDD reutilizaveis (Dado/Quando/Entao)
 - `src/Resources/keywords.robot`:
   - Implementa keywords de alto nivel (fluxo de negocio)
 - `src/TestCases/teste_pesquisa.robot`:
-  - Contem os cenarios em estrutura BDD em portugues (Dado/Quando/Entao)
+  - Contem os cenarios de teste com documentation e tags
 
 ## Cenarios cobertos
 
@@ -58,9 +61,11 @@ src/
 - Padrao Page Object
 - Separacao clara de responsabilidades
 - Reutilizacao de keywords
+- Separacao dos passos BDD em arquivo dedicado (`bdd_steps.robot`)
 - Nao utiliza `Sleep` fixo
 - Usa `Wait Until Element Is Visible` e `Wait Until Page Contains Element`
 - Locators mais robustos (aria-label, placeholder e xpath confiavel)
+- Evidencia automatica por screenshot ao final de cada teste (teardown)
 
 ## Instalacao
 
@@ -99,7 +104,7 @@ O projeto possui pipeline pronta para avaliacao tecnica em:
 
 Essa pipeline:
 
-- roda em `push`, `pull_request` e execucao manual (`workflow_dispatch`)
+- roda apenas em eventos de `pull_request` para `main` e `master`
 - instala dependencias Python
 - executa os testes Robot em ambiente Linux com navegador Chrome via `xvfb-run`
 - publica artefatos `results/report.html`, `results/log.html` e `results/output.xml`
@@ -117,5 +122,5 @@ robot -d results src/TestCases/
 3. Ou validar pela aba Actions do GitHub:
 
 - abrir o workflow `Robot Framework CI`
-- executar manualmente (Run workflow) ou verificar execucao automatica em push/PR
+- abrir ou atualizar um Pull Request para disparar a execucao automaticamente
 - baixar os artefatos `robot-reports`
